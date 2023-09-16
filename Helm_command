@@ -1,0 +1,56 @@
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+
+source <(helm completion bash)
+echo "source <(helm completion bash)" >> ~/.bashrc
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
+helm show chart bitnami/nginx
+helm repo list
+
+#Repository 에서 제공하는 chart 검색
+helm search repo
+helm search  repo nginx
+helm show chart bitnami/nginx
+
+helm inspect values bitnami/nginx > nginx_values.yaml
+
+
+
+helm install
+helm install webserver --set service.type=NodePort bitnami/nginx
+helm install webserver -f nginx_values.yaml  bitnami/nginx
+
+helm uninstall webserver
+
+헬름패키지구조 보기
+helm pull bitnami/nginx
+
+helm list
+helm show
+helm pull
+
+== 헬름 만들기
+kubectl create deployment webserver --image nginx:1.25.2 --port 80 -o yaml > manifests/deployment.yaml
+kubectl expose deployment webserver --port 80 --target-port 80 --type NodePort -o yaml > manifests/service.yaml
+kubectl delete -f manifests/
+
+helm create mynginx
+rm -rf mynginx/templates/*.yaml mynginx/templates/{_helpers.tpl,NOTES.txt}
+rm -r mynginx/templates//tests/
+cp manifests/* mynginx/templates/
+
+helm lint mynginx/
+helm install mywebserver nginx
+helm list 후 helm uninstall mywebserver
+helm upgrade --set image.repository=tomcat --set image.tag=10.1.13 webserver mynginx/
+helm upgrade --set replicaCount=2 webserver mynginx/
+
+helm rollback webserver
+
+helm package mynginx/
+=> Chart.yaml에서 버전 관리가능
+
+helm repo add my-helm-repo https://khg537.github.io/my-helm-repo/
+helm repo update
