@@ -54,3 +54,25 @@ helm package mynginx/
 
 helm repo add my-helm-repo https://khg537.github.io/my-helm-repo/
 helm repo update
+=============
+helm show values .
+helm show chart .
+helm show readme .
+helm show all .
+
+템플릿 조회
+helm template mychart ./mychart/
+
+차트 배포
+helm install mychart .
+
+릴리즈 조희
+helm get manifest mychart
+helm status mychart
+helm get notes mychart
+helm get values mychart
+=> install 명령어를 내릴 때 추가적으로 주는 values 와 key 에 대한 조희
+
+helm install mychart . -n default
+helm get manifest mychart
+helm upgrade mychart . -n default
